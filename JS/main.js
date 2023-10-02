@@ -210,3 +210,66 @@ function show_blocks() {
         }
     }
 }
+function show_level(level) {
+    // show blocks according level
+    $("body").css("background-color","#c0c0c0");
+    playing = true;
+    $("#complete").html("").hide();
+    $(".blocks").remove();
+    show_blocks();
+    $("#level span").html(level+1);
+    $("#moves span").html(0);
+    $("#level,#moves,#b_menu").show();
+    $("#lighton,#b_next").hide();
+    level_paths = levels[level];
+    $(".blocks").css({
+        "background-image":"url(https://i.imgur.com/0Fc0TuZ.png)",
+        "cursor":"default"
+    }).data("angle","0").data("blocked","1").show();
+    $(".blocks circle,.blocks polyline,.blocks path,.blocks line").hide();
+    for (var i=0;i<level_paths.length;i++) {
+        path = level_paths[i];
+        switch (path) {
+            case "":
+                break;
+            case "x":
+                $(".blocks:eq("+i+") .p13").show();
+                $(".blocks:eq("+i+") .p24").show();
+                break;
+            case "y":
+                $(".blocks:eq("+i+") .p12").show();
+                $(".blocks:eq("+i+") .p34").show();
+                break;
+            case "z":
+                $(".blocks:eq("+i+") .p23").show();
+                $(".blocks:eq("+i+") .p14").show();
+                break;
+            default:
+                arrow = path.substr(2,1);
+                angle = parseInt(path.substr(4));
+                path = path.substr(0,2);
+                $(".blocks:eq("+i+") .p"+path).show();
+                bgi = ""
+                if (angle!==0) {
+                    $(".blocks:eq("+i+") .a"+arrow).show();
+                    $(".blocks:eq("+i+") circle").show();
+                    $(".blocks:eq("+i+")").css({
+                        "background-image":"url()",
+                        "cursor":"pointer"
+                    }).data("angle",angle).data("blocked",0);
+                    rotate_block(i,angle);
+                }
+                break;
+        }
+    }
+}
+function rotate_block(n,angle) {
+    $(".blocks:eq("+n+")").css({
+        "transform:":"rotate("+angle+"deg)",
+        "-moz-transform":"rotate("+angle+"deg)",
+        "-webkit-transform":"rotate("+angle+"deg)",
+        "-o-transform":"rotate("+angle+"deg)",
+        "-ms-transform":"rotate("+angle+"deg)",
+        "-khtml-transform":"rotate("+angle+"deg)",
+    }).data("angle",angle);
+}
